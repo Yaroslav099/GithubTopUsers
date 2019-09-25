@@ -1,26 +1,20 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import UserList from './components/UserList';
+import {useTopUsers} from './hooks';
+import {connectToReduxStore} from './containers';
+import Loader from './components/Loader';
+import Err from './components/Err';
 
 function App() {
+  const {topUsers, err} = useTopUsers();
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+       {err && <Err text={err}/>}
+       {!topUsers[0] && <Loader />}
+       {topUsers[0] && <UserList data={topUsers} marginTop={25}/>}
     </div>
   );
 }
 
-export default App;
+export default connectToReduxStore(App);
